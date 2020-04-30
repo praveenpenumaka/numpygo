@@ -181,8 +181,7 @@ func Diag(nd NDArray, k ...int) NDArray {
 	return newArr
 }
 
-// TODO: Implement this
-func Transpose(nd *NDArray) *NDArray {
+func Transpose(nd NDArray) NDArray {
 	panic("numpygo:Transpose not implemented")
 	return nd
 }

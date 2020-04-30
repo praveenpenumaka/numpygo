@@ -21,12 +21,14 @@ func TestOnesInitializationWithFloat64(t *testing.T) {
 
 func TestOnesInitializationWithDefault(t *testing.T) {
 	array := Ones("", 10, 10)
-	assert.Nil(t, array)
+	assert.NotNil(t, array)
+	assert.Equal(t, 0, array.Size)
 }
 
 func TestOnesInitializationWithEmptySize(t *testing.T) {
 	array := Ones("FLOAT64")
-	assert.Nil(t, array)
+	assert.NotNil(t, array)
+	assert.Equal(t, 0, array.Size)
 }
 
 // zeros
@@ -43,12 +45,15 @@ func TestZerosInitializationWithFloat64(t *testing.T) {
 
 func TestZerosInitializationWithDefault(t *testing.T) {
 	array := Zeros("", 10, 10)
-	assert.Nil(t, array)
+	assert.NotNil(t, array)
+	assert.Equal(t, 0, array.Size)
 }
 
 func TestZerosInitializationWithEmptySize(t *testing.T) {
 	array := Zeros("FLOAT64")
-	assert.Nil(t, array)
+	assert.NotNil(t, array)
+	assert.Equal(t, 0, array.Size)
+
 }
 
 // Arange
@@ -60,7 +65,6 @@ func TestArange(t *testing.T) {
 	assert.Equal(t, float64(8), ar.Elements.Values[4])
 }
 
-
 func TestArangeContinuous(t *testing.T) {
 	ar := Arange(10)
 	assert.NotNil(t, ar)
@@ -70,20 +74,22 @@ func TestArangeContinuous(t *testing.T) {
 	}
 }
 
-func TestArangeWithTwoDimFail(t *testing.T)  {
-	ar := Arange(10,2)
-	assert.Nil(t,ar)
+func TestArangeWithTwoDimFail(t *testing.T) {
+	ar := Arange(10, 2)
+	assert.NotNil(t, ar)
+	assert.Equal(t, 0, ar.Size)
 }
 
-func TestArangeWithTwoDim(t *testing.T)  {
-	ar := Arange(0,10)
-	assert.NotNil(t,ar)
-	assert.Equal(t, 10,ar.Shape.Values[0])
+func TestArangeWithTwoDim(t *testing.T) {
+	ar := Arange(0, 10)
+	assert.NotNil(t, ar)
+	assert.Equal(t, 10, ar.Shape.Values[0])
 	assert.Equal(t, float64(0), ar.Elements.Values[0])
 	assert.Equal(t, float64(4), ar.Elements.Values[4])
 }
 
-func TestArangeWithoutSize(t *testing.T)  {
+func TestArangeWithoutSize(t *testing.T) {
 	ar := Arange()
-	assert.Nil(t,ar)
+	assert.NotNil(t, ar)
+	assert.Equal(t, 0, ar.Size)
 }

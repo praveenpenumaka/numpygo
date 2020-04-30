@@ -8,14 +8,14 @@ import (
 
 func TestAminWithoutAxis(t *testing.T) {
 	arr := Rand("FLOAT64", 10, 10)
-	min := Amin(*arr)
+	min := Amin(arr)
 	assert.Equal(t, 1, min.Dims)
 	assert.Equal(t, 1, min.Shape.Values[0])
 }
 
 func TestAminWithoutFirstAxis(t *testing.T) {
 	arr := Rand("FLOAT64", 10, 10)
-	min := Amin(*arr,0)
+	min := Amin(arr, 0)
 	assert.Equal(t, 1, min.Dims)
 	assert.Equal(t, 10, min.Shape.Values[0])
 }
@@ -30,8 +30,8 @@ func TestAmaxNewWithInvalidAxis(t *testing.T) {
 		Y: 3,
 	}}
 	arr.Set(&domain.Dimensions{Dims: dims}, float64(20))
-	maxArr := Amax(*arr,3)
-	assert.Equal(t, 0,maxArr.Size)
+	maxArr := Amax(arr, 3)
+	assert.Equal(t, 0, maxArr.Size)
 }
 
 func TestAmaxNewWithAxis(t *testing.T) {
@@ -44,7 +44,7 @@ func TestAmaxNewWithAxis(t *testing.T) {
 		Y: 3,
 	}}
 	arr.Set(&domain.Dimensions{Dims: dims}, float64(20))
-	maxArr := Amax(*arr,0)
+	maxArr := Amax(arr, 0)
 	assert.Equal(t, float64(20), maxArr.Elements.Values[3])
 }
 
@@ -58,114 +58,112 @@ func TestAmaxNewWithoutAxis(t *testing.T) {
 		Y: 3,
 	}}
 	arr.Set(&domain.Dimensions{Dims: dims}, float64(20))
-	wholeArr := Amax(*arr)
+	wholeArr := Amax(arr)
 	assert.Equal(t, float64(20), wholeArr.Elements.Values[0])
 }
 
-func TestSumWithEmptyArray(t *testing.T)  {
+func TestSumWithEmptyArray(t *testing.T) {
 	a := Sum(NDArray{})
-	assert.Equal(t,0,a.Size)
+	assert.Equal(t, 0, a.Size)
 }
 
-func TestSumWithNoAxis(t *testing.T)  {
+func TestSumWithNoAxis(t *testing.T) {
 	a := Ones("FLOAT64", 10)
-	arr:= Sum(*a)
-	assert.Equal(t,1,arr.Size)
-	assert.Equal(t, 10.0,arr.Elements.Values[0])
+	arr := Sum(a)
+	assert.Equal(t, 1, arr.Size)
+	assert.Equal(t, 10.0, arr.Elements.Values[0])
 }
 
-func TestSumWithInvalidAxis(t *testing.T)  {
+func TestSumWithInvalidAxis(t *testing.T) {
 	a := Zeros("FLOAT64", 10)
-	arr:= Sum(*a,3)
-	assert.Equal(t,0,arr.Size)
+	arr := Sum(a, 3)
+	assert.Equal(t, 0, arr.Size)
 }
 
-func TestSum(t *testing.T)  {
-	a := Ones("FLOAT64", 10,10,10)
-	arr:= Sum(*a,1)
-	assert.Equal(t,10.0,arr.Elements.Values[0])
-	assert.Equal(t,2,arr.Dims)
-	assert.Equal(t,10,arr.Shape.Values[0])
-	assert.Equal(t,10,arr.Shape.Values[1])
+func TestSum(t *testing.T) {
+	a := Ones("FLOAT64", 10, 10, 10)
+	arr := Sum(a, 1)
+	assert.Equal(t, 10.0, arr.Elements.Values[0])
+	assert.Equal(t, 2, arr.Dims)
+	assert.Equal(t, 10, arr.Shape.Values[0])
+	assert.Equal(t, 10, arr.Shape.Values[1])
 }
 
 ///
-func TestAmaxWithEmptyArray(t *testing.T)  {
+func TestAmaxWithEmptyArray(t *testing.T) {
 	a := Amax(NDArray{})
-	assert.Equal(t,0,a.Size)
+	assert.Equal(t, 0, a.Size)
 }
 
-func TestAmaxWithNoAxis(t *testing.T)  {
+func TestAmaxWithNoAxis(t *testing.T) {
 	a := Ones("FLOAT64", 10)
-	arr:= Amax(*a)
-	assert.Equal(t,1,arr.Size)
-	assert.Equal(t,1.0,arr.Elements.Values[0])
+	arr := Amax(a)
+	assert.Equal(t, 1, arr.Size)
+	assert.Equal(t, 1.0, arr.Elements.Values[0])
 }
 
-func TestAmaxWithInvalidAxis(t *testing.T)  {
+func TestAmaxWithInvalidAxis(t *testing.T) {
 	a := Zeros("FLOAT64", 10)
-	arr:= Amax(*a,3)
-	assert.Equal(t,0,arr.Size)
+	arr := Amax(a, 3)
+	assert.Equal(t, 0, arr.Size)
 }
 
-func TestAmax(t *testing.T)  {
-	a := Ones("FLOAT64", 10,10,10)
-	arr:= Amax(*a,1)
-	assert.Equal(t,1.0,arr.Elements.Values[0])
-	assert.Equal(t,2,arr.Dims)
-	assert.Equal(t,10,arr.Shape.Values[0])
-	assert.Equal(t,10,arr.Shape.Values[1])
+func TestAmax(t *testing.T) {
+	a := Ones("FLOAT64", 10, 10, 10)
+	arr := Amax(a, 1)
+	assert.Equal(t, 1.0, arr.Elements.Values[0])
+	assert.Equal(t, 2, arr.Dims)
+	assert.Equal(t, 10, arr.Shape.Values[0])
+	assert.Equal(t, 10, arr.Shape.Values[1])
 }
 
 ///
-func TestAminWithEmptyArray(t *testing.T)  {
+func TestAminWithEmptyArray(t *testing.T) {
 	a := Amin(NDArray{})
-	assert.Equal(t,0,a.Size)
+	assert.Equal(t, 0, a.Size)
 }
 
-func TestAminWithNoAxis(t *testing.T)  {
+func TestAminWithNoAxis(t *testing.T) {
 	a := Ones("FLOAT64", 10)
-	arr:= Amin(*a)
-	assert.Equal(t,1,arr.Size)
-	assert.Equal(t,1.0,arr.Elements.Values[0])
+	arr := Amin(a)
+	assert.Equal(t, 1, arr.Size)
+	assert.Equal(t, 1.0, arr.Elements.Values[0])
 }
 
-func TestAminWithInvalidAxis(t *testing.T)  {
+func TestAminWithInvalidAxis(t *testing.T) {
 	a := Zeros("FLOAT64", 10)
-	arr:= Amin(*a,3)
-	assert.Equal(t,0,arr.Size)
+	arr := Amin(a, 3)
+	assert.Equal(t, 0, arr.Size)
 }
 
-func TestAmin(t *testing.T)  {
-	a := Ones("FLOAT64", 10,10,10)
-	arr:= Amin(*a,1)
-	assert.Equal(t,1.0,arr.Elements.Values[0])
-	assert.Equal(t,2,arr.Dims)
-	assert.Equal(t,10,arr.Shape.Values[0])
-	assert.Equal(t,10,arr.Shape.Values[1])
+func TestAmin(t *testing.T) {
+	a := Ones("FLOAT64", 10, 10, 10)
+	arr := Amin(a, 1)
+	assert.Equal(t, 1.0, arr.Elements.Values[0])
+	assert.Equal(t, 2, arr.Dims)
+	assert.Equal(t, 10, arr.Shape.Values[0])
+	assert.Equal(t, 10, arr.Shape.Values[1])
 }
-
 
 ///
-func TestUniqueWithEmptyArray(t *testing.T)  {
+func TestUniqueWithEmptyArray(t *testing.T) {
 	a := Unique(NDArray{})
-	assert.Equal(t,0,a.Size)
+	assert.Equal(t, 0, a.Size)
 }
 
-func TestUniqueWithNoAxis(t *testing.T)  {
+func TestUniqueWithNoAxis(t *testing.T) {
 	a := Rand("FLOAT64", 10)
-	arr:= Unique(*a)
-	assert.Equal(t,10,arr.Size)
-	assert.NotEqual(t,1.0,arr.Elements.Values[0])
+	arr := Unique(a)
+	assert.Equal(t, 10, arr.Size)
+	assert.NotEqual(t, 1.0, arr.Elements.Values[0])
 }
 
-func TestUniqueWithInvalidAxis(t *testing.T)  {
+func TestUniqueWithInvalidAxis(t *testing.T) {
 	a := Zeros("FLOAT64", 10)
-	arr:= Unique(*a,3)
-	assert.Equal(t,0,arr.Size)
+	arr := Unique(a, 3)
+	assert.Equal(t, 0, arr.Size)
 }
-
 
 //TODO: Fix this test case
-func TestUnique(t *testing.T)  {
+func TestUnique(t *testing.T) {
 }

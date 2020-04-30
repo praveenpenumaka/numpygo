@@ -51,12 +51,12 @@ func (v *IVector) Mult() int {
 }
 
 func (v *IVector) Min() int {
-	if len(v.Values) == 0{
+	if len(v.Values) == 0 {
 		return 0
 	}
 	minValue := v.Values[0]
 	for _, element := range v.Values {
-		if element<minValue{
+		if element < minValue {
 			minValue = element
 		}
 	}

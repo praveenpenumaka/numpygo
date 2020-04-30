@@ -26,30 +26,30 @@ func TestCreateNDIndex(t *testing.T) {
 	}
 }
 
-func TestCreateNDIndexForOneD(t *testing.T){
+func TestCreateNDIndexForOneD(t *testing.T) {
 	ndIndex := NewNDIndex([]int{2, 1})
 	assert.NotNil(t, ndIndex)
 	ndIndex.Reset()
-	v:=ndIndex.Next()
-	assert.Equal(t,0,v.Values[0])
-	assert.Equal(t,0,v.Values[1])
-	v=ndIndex.Next()
-	assert.Equal(t,1,v.Values[0])
-	assert.Equal(t,0,v.Values[1])
-	v=ndIndex.Next()
-	assert.Nil(t,v)
+	v := ndIndex.Next()
+	assert.Equal(t, 0, v.Values[0])
+	assert.Equal(t, 0, v.Values[1])
+	v = ndIndex.Next()
+	assert.Equal(t, 1, v.Values[0])
+	assert.Equal(t, 0, v.Values[1])
+	v = ndIndex.Next()
+	assert.Nil(t, v)
 }
 
-func TestCreateNDIndexForOneDTrns(t *testing.T){
+func TestCreateNDIndexForOneDTrns(t *testing.T) {
 	ndIndex := NewNDIndex([]int{1, 2})
 	assert.NotNil(t, ndIndex)
 	ndIndex.Reset()
-	v:=ndIndex.Next()
-	assert.Equal(t,0,v.Values[0])
-	assert.Equal(t,0,v.Values[1])
-	v=ndIndex.Next()
-	assert.Equal(t,0,v.Values[0])
-	assert.Equal(t,1,v.Values[1])
-	v=ndIndex.Next()
-	assert.Nil(t,v)
+	v := ndIndex.Next()
+	assert.Equal(t, 0, v.Values[0])
+	assert.Equal(t, 0, v.Values[1])
+	v = ndIndex.Next()
+	assert.Equal(t, 0, v.Values[0])
+	assert.Equal(t, 1, v.Values[1])
+	v = ndIndex.Next()
+	assert.Nil(t, v)
 }

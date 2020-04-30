@@ -6,12 +6,12 @@ import (
 	"math"
 )
 
-func newNDArray(dtype string, shape domain.IVector, noinit ...bool) *NDArray {
+func newNDArray(dtype string, shape domain.IVector, noinit ...bool) NDArray {
 	if dtype == "" {
-		return nil
+		return NDArray{}
 	}
 	if len(shape.Values) == 0 {
-		return nil
+		return NDArray{}
 	}
 	size := shape.Mult()
 	elements := domain.Vector{Values: make([]float64, size)}
@@ -22,7 +22,7 @@ func newNDArray(dtype string, shape domain.IVector, noinit ...bool) *NDArray {
 			elements = domain.Vector{Values: nil}
 		}
 	}
-	return &NDArray{
+	return NDArray{
 		Elements: elements,
 		Shape:    shape,
 		DType:    dtype,
@@ -32,55 +32,55 @@ func newNDArray(dtype string, shape domain.IVector, noinit ...bool) *NDArray {
 	}
 }
 
-func NewNDArray(dtype string, shape []int, noinit ...bool) *NDArray {
+func NewNDArray(dtype string, shape []int, noinit ...bool) NDArray {
 	if noinit == nil {
 		nd := newNDArray(dtype, domain.IVector{Values: shape})
-		if nd == nil {
-			return nil
+		if nd.Size == 0 {
+			return NDArray{}
 		}
 		nd.Elements.Fill(math.Inf(-1))
 		return nd
 	} else if noinit[0] {
 		nd := newNDArray(dtype, domain.IVector{Values: shape}, noinit[0])
-		if nd == nil {
-			return nil
+		if nd.Size == 0 {
+			return NDArray{}
 		}
 		return nd
 	}
-	return nil
+	return NDArray{}
 }
 
-func MaxNDArray(dtype string, shape []int) *NDArray {
+func MaxNDArray(dtype string, shape []int) NDArray {
 	nd := newNDArray(dtype, domain.IVector{Values: shape})
-	if nd == nil {
-		return nil
+	if nd.Size == 0 {
+		return NDArray{}
 	}
 	nd.Elements.Fill(math.Inf(1))
 	return nd
 }
 
-func Zeros(dtype string, shape ...int) *NDArray {
+func Zeros(dtype string, shape ...int) NDArray {
 	nd := newNDArray(dtype, domain.IVector{Values: shape})
-	if nd == nil {
-		return nil
+	if nd.Size == 0 {
+		return NDArray{}
 	}
 	nd.Elements.Fill(float64(0))
 	return nd
 }
 
-func Ones(dtype string, shape ...int) *NDArray {
+func Ones(dtype string, shape ...int) NDArray {
 	nd := newNDArray(dtype, domain.IVector{Values: shape})
-	if nd == nil {
-		return nil
+	if nd.Size == 0 {
+		return NDArray{}
 	}
 	nd.Elements.Fill(float64(1))
 	return nd
 }
 
-func aRange(start, end, step int) *NDArray {
+func aRange(start, end, step int) NDArray {
 	delta := end - start
 	if delta < 0 {
-		return nil
+		return NDArray{}
 	}
 	size := delta / step
 	newnd := newNDArray("FLOAT64", domain.IVector{Values: []int{size}})
@@ -90,9 +90,9 @@ func aRange(start, end, step int) *NDArray {
 	return newnd
 }
 
-func Arange(size ...int) *NDArray {
+func Arange(size ...int) NDArray {
 	if len(size) <= 0 {
-		return nil
+		return NDArray{}
 	}
 	if len(size) == 1 {
 		return aRange(0, size[0], 1)
@@ -103,6 +103,6 @@ func Arange(size ...int) *NDArray {
 	return aRange(size[0], size[1], size[2])
 }
 
-func (nd *NDArray) CopyLike() *NDArray {
-	return newNDArray(nd.DType,domain.IVector{Values:nd.Shape.Values})
+func (nd *NDArray) CopyLike() NDArray {
+	return newNDArray(nd.DType, domain.IVector{Values: nd.Shape.Values})
 }

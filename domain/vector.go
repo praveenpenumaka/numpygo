@@ -26,30 +26,34 @@ func (v *Vector) Add(a *Vector) float64 {
 	return float64(0)
 }
 
-func (v *Vector) Max() float64 {
-	if len(v.Values) == 0{
-		return math.Inf(1)
+func (v *Vector) Max() (float64, int) {
+	if len(v.Values) == 0 {
+		return math.Inf(1), -1
 	}
 	max := v.Values[0]
-	for _, element := range v.Values {
+	maxIndex := -1
+	for index, element := range v.Values {
 		if element > max {
 			max = element
+			maxIndex = index
 		}
 	}
-	return max
+	return max, maxIndex
 }
 
-func (v *Vector) Min() float64 {
-	if len(v.Values) == 0{
-		return math.Inf(-1)
+func (v *Vector) Min() (float64, int) {
+	if len(v.Values) == 0 {
+		return math.Inf(-1), -1
 	}
 	min := v.Values[0]
-	for _, element := range v.Values {
+	minIndex := -1
+	for index, element := range v.Values {
 		if element > min {
 			min = element
+			minIndex = index
 		}
 	}
-	return min
+	return min, minIndex
 }
 
 func (v *Vector) Unique() *Vector {
@@ -79,15 +83,15 @@ func (v *Vector) Sum() float64 {
 	return sum
 }
 
-func (v *Vector) Mean() float64  {
+func (v *Vector) Mean() float64 {
 	sum := float64(0)
-	count :=0
+	count := 0
 	for _, element := range v.Values {
 		sum += element
 		count++
 	}
-	if count==0 {
+	if count == 0 {
 		return float64(0)
 	}
-	return sum/float64(count)
+	return sum / float64(count)
 }

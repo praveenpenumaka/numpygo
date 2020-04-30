@@ -6,19 +6,19 @@ import (
 	"github.com/praveenpenumaka/numpygo/utils"
 )
 
-func Split(a *NDArray, index int, axis ...int) (*NDArray, *NDArray) {
-	if a == nil {
-		return nil, nil
+func Split(a NDArray, index int, axis ...int) (NDArray, NDArray) {
+	if a.Size == 0 {
+		return NDArray{}, NDArray{}
 	}
 	aAxis := 0
 	if axis != nil && len(axis) != 0 {
 		if axis[0] >= a.Dims {
-			return nil, nil
+			return NDArray{}, NDArray{}
 		}
 		aAxis = axis[0]
 	}
 	if index >= a.Shape.Values[aAxis] {
-		return nil, nil
+		return NDArray{}, NDArray{}
 	}
 
 	shapea := domain.IVector{Values: nil}
@@ -41,20 +41,20 @@ func Split(a *NDArray, index int, axis ...int) (*NDArray, *NDArray) {
 		diff := indexAlongAxis - index
 		index, err := utils.GetIndexFromVector(vector, &a.Strides, &a.Shape)
 		if err != nil {
-			return nil, nil
+			return NDArray{}, NDArray{}
 		}
 		value := a.Elements.Values[index]
 		if diff >= 0 {
 			vector.Values[aAxis] = diff
 			newIndex, err := utils.GetIndexFromVector(vector, &sb.Strides, &sb.Shape)
 			if err != nil {
-				return nil, nil
+				return NDArray{}, NDArray{}
 			}
 			sb.Elements.Values[newIndex] = value
 		} else {
 			newIndex, err := utils.GetIndexFromVector(vector, &sa.Strides, &sa.Shape)
 			if err != nil {
-				return nil, nil
+				return NDArray{}, NDArray{}
 			}
 			sa.Elements.Values[newIndex] = value
 		}
@@ -62,27 +62,27 @@ func Split(a *NDArray, index int, axis ...int) (*NDArray, *NDArray) {
 	return sa, sb
 }
 
-func Concatenate(a *NDArray, b *NDArray, axis ...int) *NDArray {
-	if a == nil || b == nil {
-		return nil
+func Concatenate(a, b NDArray, axis ...int) NDArray {
+	if a.Size == 0 || b.Size == 0 {
+		return NDArray{}
 	}
 	aAxis := 0
 	if axis != nil && len(axis) != 0 {
 		if axis[0] > a.Dims {
-			return nil
+			return NDArray{}
 		}
 		aAxis = axis[0]
 	}
 	if a.Dims != b.Dims {
 		// Cannot append if arrays has different dimensions
-		return nil
+		return NDArray{}
 	}
 
 	// All the axis should be same except for along axis
 	aShape := a.Shape.Remove(aAxis)
 	bShape := b.Shape.Remove(aAxis)
 	if !aShape.Equals(bShape) {
-		return nil
+		return NDArray{}
 	}
 
 	newShape := domain.IVector{Values: nil}
@@ -100,7 +100,7 @@ func Concatenate(a *NDArray, b *NDArray, axis ...int) *NDArray {
 	for vector := ndIndex.Next(); vector != nil; vector = ndIndex.Next() {
 		newIndex, err := utils.GetIndexFromVector(vector, &cArray.Strides, &cArray.Shape)
 		if err != nil {
-			return nil
+			return NDArray{}
 		}
 		value := float64(0)
 		diff := vector.Values[aAxis] - a.Shape.Values[aAxis]
@@ -108,13 +108,13 @@ func Concatenate(a *NDArray, b *NDArray, axis ...int) *NDArray {
 			vector.Values[aAxis] = diff
 			index, err := utils.GetIndexFromVector(vector, &b.Strides, &b.Shape)
 			if err != nil {
-				return nil
+				return NDArray{}
 			}
 			value = b.Elements.Values[index]
 		} else {
 			index, err := utils.GetIndexFromVector(vector, &a.Strides, &a.Shape)
 			if err != nil {
-				return nil
+				return NDArray{}
 			}
 			value = a.Elements.Values[index]
 		}
@@ -124,8 +124,8 @@ func Concatenate(a *NDArray, b *NDArray, axis ...int) *NDArray {
 	return cArray
 }
 
-func FilterRows(a *NDArray,lambda func(row *domain.Vector) bool) *NDArray {
-	newArray := &NDArray{
+func FilterRows(a NDArray, lambda func(row *domain.Vector) bool) NDArray {
+	newArray := NDArray{
 		Elements: domain.Vector{},
 		Shape:    domain.IVector{},
 		Strides:  domain.IVector{},
@@ -136,41 +136,41 @@ func FilterRows(a *NDArray,lambda func(row *domain.Vector) bool) *NDArray {
 	newArray.Shape.CopyFrom(a.Shape.Values)
 	newArray.Shape.Zeros()
 	newArray.Strides.CopyFrom(a.Strides.Values)
-	size :=0
-	count :=0
-	for i :=0;i<a.Shape.Values[0];i++ {
-		dim := ParseDim(fmt.Sprintf("%d,:",i),&a.Shape)
-		row,rowErr := a.Get(dim)
-		if rowErr == nil{
-			if lambda(&row.Elements){
+	size := 0
+	count := 0
+	for i := 0; i < a.Shape.Values[0]; i++ {
+		dim := ParseDim(fmt.Sprintf("%d,:", i), &a.Shape)
+		row, rowErr := a.Get(dim)
+		if rowErr == nil {
+			if lambda(&row.Elements) {
 				newArray.Elements.Values = append(newArray.Elements.Values, row.Elements.Values...)
 				count++
 				size = size + len(row.Elements.Values)
 				newArray.Shape.Values[0] = count
 				newArray.Shape.Values[1] = row.Size
-				newArray.Size= size
+				newArray.Size = size
 			}
 		}
 	}
 	return newArray
 }
 
-func Diag(nd *NDArray, k ...int) *NDArray{
+func Diag(nd NDArray, k ...int) NDArray {
 	kLen := 0
 	if len(k) > 0 {
 		kLen = k[0]
 	}
 	if nd.Dims != 2 {
-		return nil
+		return NDArray{}
 	}
 	axis := nd.Shape.Min()
-	newArr:=NewNDArray("FLOAT64",[]int{axis,1},true)
-	size:=0
-	for i:=0;i<axis;i++{
-		x:=i
-		y:=i+kLen
-		oldIndex := nd.Strides.Values[0]*x+nd.Strides.Values[1]*y
-		if x>=0 && y>=0 && oldIndex >=0 && oldIndex  < nd.Size{
+	newArr := NewNDArray("FLOAT64", []int{axis, 1}, true)
+	size := 0
+	for i := 0; i < axis; i++ {
+		x := i
+		y := i + kLen
+		oldIndex := nd.Strides.Values[0]*x + nd.Strides.Values[1]*y
+		if x >= 0 && y >= 0 && oldIndex >= 0 && oldIndex < nd.Size {
 			newArr.Elements.Values = append(newArr.Elements.Values, nd.Elements.Values[oldIndex])
 			size++
 		}
@@ -182,6 +182,7 @@ func Diag(nd *NDArray, k ...int) *NDArray{
 }
 
 // TODO: Implement this
-func Transpose(nd *NDArray) *NDArray{
+func Transpose(nd *NDArray) *NDArray {
+	panic("numpygo:Transpose not implemented")
 	return nd
 }

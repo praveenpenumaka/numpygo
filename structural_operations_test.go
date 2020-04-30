@@ -7,23 +7,29 @@ import (
 )
 
 func TestSplitNilArray(t *testing.T) {
-	sa, sb := Split(nil, 2)
-	assert.Nil(t, sa)
-	assert.Nil(t, sb)
+	sa, sb := Split(NDArray{}, 2)
+	assert.NotNil(t, sa)
+	assert.NotNil(t, sb)
+	assert.Equal(t, 0, sa.Size)
+	assert.Equal(t, 0, sb.Size)
 }
 
 func TestSplitWithInvalidIndex(t *testing.T) {
 	a := Ones("FLOAT64", 10, 10)
 	sa, sb := Split(a, 12)
-	assert.Nil(t, sa)
-	assert.Nil(t, sb)
+	assert.NotNil(t, sa)
+	assert.Equal(t, 0, sa.Size)
+	assert.NotNil(t, sb)
+	assert.Equal(t, 0, sb.Size)
 }
 
 func TestSplitWithInvalidAxis(t *testing.T) {
 	a := Ones("FLOAT64", 10, 10)
 	sa, sb := Split(a, 5, 2)
-	assert.Nil(t, sa)
-	assert.Nil(t, sb)
+	assert.NotNil(t, sa)
+	assert.NotNil(t, sb)
+	assert.Equal(t, 0, sa.Size)
+	assert.Equal(t, 0, sb.Size)
 }
 
 func TestSplitArray(t *testing.T) {
@@ -46,29 +52,33 @@ func TestSplitArray(t *testing.T) {
 }
 
 func TestConcatenateWithNilArrays(t *testing.T) {
-	c := Concatenate(nil, nil)
-	assert.Nil(t, c)
+	c := Concatenate(NDArray{}, NDArray{})
+	assert.NotNil(t, c)
+	assert.Equal(t, 0, c.Size)
 }
 
 func TestConcatenateWithInvalidAxis(t *testing.T) {
 	a := Ones("FLOAT64", 10, 10)
 	b := Ones("FLOAT64", 10, 10, 10)
 	c := Concatenate(a, b, 4)
-	assert.Nil(t, c)
+	assert.NotNil(t, c)
+	assert.Equal(t, 0, c.Size)
 }
 
 func TestConcatenateWithDifferentDimensionArrays(t *testing.T) {
 	a := Ones("FLOAT64", 10, 10)
 	b := Ones("FLOAT64", 10, 10, 10)
 	c := Concatenate(a, b)
-	assert.Nil(t, c)
+	assert.NotNil(t, c)
+	assert.Equal(t, 0, c.Size)
 }
 
 func TestConcatenateWithNonMatchingDimensions(t *testing.T) {
 	a := Ones("FLOAT64", 3, 9)
 	b := Ones("FLOAT64", 3, 10)
 	c := Concatenate(a, b)
-	assert.Nil(t, c)
+	assert.NotNil(t, c)
+	assert.Equal(t, 0, c.Size)
 }
 
 func TestConcatenate(t *testing.T) {
@@ -85,46 +95,45 @@ func TestConcatenate(t *testing.T) {
 	}
 }
 
-
-func TestDiagWithInvalidDims(t *testing.T)  {
-	a := Ones("FLOAT64",2,2,2)
-	b:= Diag(a)
-	assert.Nil(t,b)
+func TestDiagWithInvalidDims(t *testing.T) {
+	a := Ones("FLOAT64", 2, 2, 2)
+	b := Diag(a)
+	assert.NotNil(t, b)
+	assert.Equal(t, 0, b.Size)
 }
 
-
-func TestDiag(t *testing.T)  {
+func TestDiag(t *testing.T) {
 	a := Arange(9)
-	a.Reshape(&domain.IVector{Values:[]int{3,3}})
-	b:= Diag(a)
-	assert.NotNil(t,b)
-	assert.Equal(t,3,b.Shape.Values[0])
-	assert.Equal(t,1,b.Shape.Values[1])
-	assert.Equal(t,3,b.Size)
-	assert.Equal(t,float64(0),b.Elements.Values[0])
-	assert.Equal(t,float64(4),b.Elements.Values[1])
-	assert.Equal(t,float64(8),b.Elements.Values[2])
+	a.Reshape(&domain.IVector{Values: []int{3, 3}})
+	b := Diag(a)
+	assert.NotNil(t, b)
+	assert.Equal(t, 3, b.Shape.Values[0])
+	assert.Equal(t, 1, b.Shape.Values[1])
+	assert.Equal(t, 3, b.Size)
+	assert.Equal(t, float64(0), b.Elements.Values[0])
+	assert.Equal(t, float64(4), b.Elements.Values[1])
+	assert.Equal(t, float64(8), b.Elements.Values[2])
 }
 
-func TestDiagWithPositiveK(t *testing.T)  {
+func TestDiagWithPositiveK(t *testing.T) {
 	a := Arange(9)
-	a.Reshape(&domain.IVector{Values:[]int{3,3}})
-	b:= Diag(a,1)
-	assert.NotNil(t,b)
-	assert.Equal(t,2,b.Shape.Values[0])
-	assert.Equal(t,1,b.Shape.Values[1])
-	assert.Equal(t,2,b.Size)
-	assert.Equal(t,float64(1),b.Elements.Values[0])
-	assert.Equal(t,float64(5),b.Elements.Values[1])
+	a.Reshape(&domain.IVector{Values: []int{3, 3}})
+	b := Diag(a, 1)
+	assert.NotNil(t, b)
+	assert.Equal(t, 2, b.Shape.Values[0])
+	assert.Equal(t, 1, b.Shape.Values[1])
+	assert.Equal(t, 2, b.Size)
+	assert.Equal(t, float64(1), b.Elements.Values[0])
+	assert.Equal(t, float64(5), b.Elements.Values[1])
 }
 
-func TestDiagWithNegativeK(t *testing.T)  {
+func TestDiagWithNegativeK(t *testing.T) {
 	a := Arange(9)
-	a.Reshape(&domain.IVector{Values:[]int{3,3}})
-	b:= Diag(a,-2)
-	assert.NotNil(t,b)
-	assert.Equal(t,1,b.Shape.Values[0])
-	assert.Equal(t,1,b.Shape.Values[1])
-	assert.Equal(t,1,b.Size)
-	assert.Equal(t,float64(6),b.Elements.Values[0])
+	a.Reshape(&domain.IVector{Values: []int{3, 3}})
+	b := Diag(a, -2)
+	assert.NotNil(t, b)
+	assert.Equal(t, 1, b.Shape.Values[0])
+	assert.Equal(t, 1, b.Shape.Values[1])
+	assert.Equal(t, 1, b.Size)
+	assert.Equal(t, float64(6), b.Elements.Values[0])
 }

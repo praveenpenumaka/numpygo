@@ -1,15 +1,26 @@
 package domain
 
-import "math"
+import (
+	"github.com/praveenpenumaka/numpygo/domain/v_funcs"
+	"math"
+)
 
 type Vector struct {
 	Values []float64
 }
 
-func (v *Vector) Fill(value float64) {
-	for i, _ := range v.Values {
-		v.Values[i] = value
+func (v *Vector) Bind(vfunc func(value interface{}, args ...interface{}) interface{}, args ...interface{}) {
+	for i, val := range v.Values {
+		v.Values[i] = vfunc(val, args...).(float64)
 	}
+}
+
+func (v *Vector) Clip(min, max float64) {
+	v.Bind(v_funcs.Clip, min, max)
+}
+
+func (v *Vector) Fill(value float64) {
+	v.Bind(v_funcs.Fill, value)
 }
 
 func (v *Vector) Zeros() {

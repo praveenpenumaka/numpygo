@@ -63,3 +63,14 @@ func Equals(a NDArray, b NDArray) NDArray {
 	}
 	return newArray
 }
+
+// Clip (limit) the values in an array.
+func Clip(a NDArray, min, max float64) NDArray {
+	if a.Size == 0 {
+		return NDArray{}
+	}
+	vec := &a.Elements
+	vec.Clip(min, max)
+	a.Elements = *vec
+	return a
+}

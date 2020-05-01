@@ -1,21 +1,15 @@
 package v_funcs
 
-func Fill(array []interface{}, value interface{}) []interface{} {
-	for i, _ := range array {
-		array[i] = value
-	}
-	return array
+func Fill(value interface{}, args ...interface{}) interface{} {
+	return args[0]
 }
 
-func Add(array []interface{}) interface{} {
-	if len(array) == 0 {
-		return 0.0
+func Add(value interface{}, args ...interface{}) interface{} {
+	if len(args) == 0 {
+		return value
 	}
-	value := array[0]
-	for i, v := range array {
-		if i != 0 {
-			value = value.(float64) + v.(float64)
-		}
+	for i, _ := range args {
+		value = value.(float64) + args[i].(float64)
 	}
 	return value
 }

@@ -14,21 +14,18 @@ func ForEachElement(nd NDArray, lambda func(v float64) float64) NDArray {
 }
 
 func Exp(nd NDArray) NDArray {
-	return ForEachElement(nd, func(v float64) float64 {
-		return math.Exp(v)
-	})
+	nd.Elements.Exp()
+	return nd
 }
 
 func Log2(nd NDArray) NDArray {
-	return ForEachElement(nd, func(v float64) float64 {
-		return math.Log(v) / math.Log(2)
-	})
+	nd.Elements.Log2()
+	return nd
 }
 
 func Log(nd NDArray) NDArray {
-	return ForEachElement(nd, func(v float64) float64 {
-		return math.Log(v)
-	})
+	nd.Elements.Log()
+	return nd
 }
 
 func Add(nd NDArray, factor float64) NDArray {

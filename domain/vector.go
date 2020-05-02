@@ -1,6 +1,7 @@
 package domain
 
 import (
+	"github.com/praveenpenumaka/numpygo/domain/r_funcs"
 	"github.com/praveenpenumaka/numpygo/domain/v_funcs"
 	"math"
 )
@@ -15,6 +16,14 @@ func (v *Vector) Bind(vfunc func(value interface{}, args ...interface{}) interfa
 	}
 }
 
+func (v *Vector) Reduce(rfunc func(red, value interface{}, args ...interface{}) interface{}, args ...interface{}) float64 {
+	reduced := args[0].(float64)
+	for _, val := range v.Values {
+		reduced = rfunc(reduced, val, args...).(float64)
+	}
+	return reduced
+}
+
 func (v *Vector) Clip(min, max float64) {
 	v.Bind(v_funcs.Clip, min, max)
 }
@@ -24,7 +33,39 @@ func (v *Vector) Fill(value float64) {
 }
 
 func (v *Vector) Zeros() {
-	v.Fill(float64(0))
+	v.Bind(v_funcs.Fill, 0.0)
+}
+
+func (v *Vector) Maximum() float64 {
+	return v.Reduce(r_funcs.Max, math.Inf(-1))
+}
+
+func (v *Vector) Minimum() float64 {
+	return v.Reduce(r_funcs.Min, math.Inf(1))
+}
+
+func (v *Vector) Exp() {
+	v.Bind(v_funcs.Exp)
+}
+
+func (v *Vector) Exp2() {
+	v.Bind(v_funcs.Exp2)
+}
+
+func (v *Vector) Log() {
+	v.Bind(v_funcs.Log)
+}
+
+func (v *Vector) Log2() {
+	v.Bind(v_funcs.Log2)
+}
+
+func (v *Vector) Pow() {
+	v.Bind(v_funcs.Pow)
+}
+
+func (v *Vector) Sum() float64 {
+	return v.Reduce(r_funcs.Sum, float64(0))
 }
 
 func (v *Vector) Add(a *Vector) float64 {
@@ -78,20 +119,6 @@ func (v *Vector) Unique() *Vector {
 		keys = append(keys, key)
 	}
 	return &Vector{Values: keys}
-}
-
-func (v *Vector) Pow(p float64) {
-	for i, element := range v.Values {
-		v.Values[i] = math.Pow(element, p)
-	}
-}
-
-func (v *Vector) Sum() float64 {
-	sum := float64(0)
-	for _, element := range v.Values {
-		sum += element
-	}
-	return sum
 }
 
 func (v *Vector) Mean() float64 {

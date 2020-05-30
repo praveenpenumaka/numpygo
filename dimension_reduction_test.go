@@ -6,6 +6,36 @@ import (
 	"testing"
 )
 
+func TestArgMaxWithInvalidSize(t *testing.T) {
+	arr := NDArray{}
+	a := Argmax(arr)
+	assert.Equal(t, 0, a.Size)
+}
+
+func TestArgMaxWithInvalidAxis(t *testing.T) {
+	arr := Rand("FLOAT64", 3, 4, 5)
+	a := Argmax(arr, 5)
+	assert.Equal(t, 0, a.Size)
+}
+
+func TestArgMaxWithoutAxis(t *testing.T) {
+	arr := Arange(100)
+	arr.Reshape(&domain.IVector{Values: []int{10, 10}})
+	a := Argmax(arr)
+	assert.Equal(t, 1, a.Size)
+	assert.Equal(t, 99.0, a.Elements.Values[0])
+}
+
+func TestArgMaxWithFirstAxis(t *testing.T) {
+	arr := Arange(6)
+	arr.Reshape(&domain.IVector{Values: []int{2, 3}})
+	a := Argmax(arr, 0)
+	assert.Equal(t, 3, a.Size)
+	assert.Equal(t, 1.0, a.Elements.Values[0])
+	assert.Equal(t, 1.0, a.Elements.Values[0])
+	assert.Equal(t, 1.0, a.Elements.Values[0])
+}
+
 func TestAminWithoutAxis(t *testing.T) {
 	arr := Rand("FLOAT64", 10, 10)
 	min := Amin(arr)

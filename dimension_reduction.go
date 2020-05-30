@@ -5,7 +5,6 @@ import (
 	"github.com/praveenpenumaka/numpygo/utils"
 )
 
-// TODO: Implement and add test cases
 func Argmax(a NDArray, axis ...int) NDArray {
 	if a.Size == 0 {
 		return NDArray{}

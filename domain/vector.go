@@ -32,6 +32,16 @@ func (v *Vector) Fill(value float64) {
 	v.Bind(v_funcs.Fill, value)
 }
 
+func (v *Vector) FillIndex(values []float64, index int) {
+	vLen := len(v.Values)
+	for i, val := range values {
+		rIndex := index + i
+		if rIndex < vLen {
+			v.Values[index+i] = val
+		}
+	}
+}
+
 func (v *Vector) Zeros() {
 	v.Bind(v_funcs.Fill, 0.0)
 }
@@ -60,8 +70,8 @@ func (v *Vector) Log2() {
 	v.Bind(v_funcs.Log2)
 }
 
-func (v *Vector) Pow() {
-	v.Bind(v_funcs.Pow)
+func (v *Vector) Pow(p float64) {
+	v.Bind(v_funcs.Pow, p)
 }
 
 func (v *Vector) Sum() float64 {
@@ -83,7 +93,7 @@ func (v *Vector) Max() (float64, int) {
 		return math.Inf(1), -1
 	}
 	max := v.Values[0]
-	maxIndex := -1
+	maxIndex := 0
 	for index, element := range v.Values {
 		if element > max {
 			max = element
@@ -98,9 +108,9 @@ func (v *Vector) Min() (float64, int) {
 		return math.Inf(-1), -1
 	}
 	min := v.Values[0]
-	minIndex := -1
+	minIndex := 0
 	for index, element := range v.Values {
-		if element > min {
+		if element < min {
 			min = element
 			minIndex = index
 		}

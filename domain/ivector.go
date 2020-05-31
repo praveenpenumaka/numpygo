@@ -4,15 +4,33 @@ type IVector struct {
 	Values []int
 }
 
-func (v *IVector) CopyFrom(c []int) {
+func (v *IVector) CopyFrom(c []int) bool {
 	if c == nil || len(c) == 0 {
-		return
+		return false
 	}
 	if v.Values == nil {
 		v.Values = make([]int, len(c))
+	} else if len(c) != len(v.Values) {
+		return false
 	}
 	for i := range v.Values {
 		v.Values[i] = c[i]
+	}
+	return true
+}
+
+func (v *IVector) Padding(location string, value, len int) {
+	if len <= 0 || location == "" {
+		return
+	}
+	d := make([]int, len)
+	for i, _ := range d {
+		d[i] = value
+	}
+	if location == "LEAD" {
+		v.Values = append(d, v.Values...)
+	} else if location == "TRAIL" {
+		v.Values = append(v.Values, d...)
 	}
 }
 
@@ -24,17 +42,19 @@ func (v *IVector) Zeros() {
 
 // Returns a new vector removing element at i
 func (v *IVector) Remove(index int) *IVector {
-	var newVector IVector
-	for i, _ := range v.Values {
-		if i != index {
-			newVector.Values = append(newVector.Values, v.Values[i])
-		}
+	if index < 0 || index >= len(v.Values) {
+		return nil
 	}
-	return &newVector
+	values := v.Values
+	newVector := &IVector{}
+	indexN := index + 1
+	newVector.Values = append(newVector.Values, values[:index]...)
+	newVector.Values = append(newVector.Values, values[indexN:]...)
+	return newVector
 }
 
 func (v *IVector) Add(a *IVector) {
-	if len(v.Values) != len(a.Values) {
+	if len(v.Values) == 0 || len(a.Values) == 0 || len(v.Values) != len(a.Values) {
 		return
 	}
 	for i, _ := range v.Values {
@@ -50,17 +70,34 @@ func (v *IVector) Mult() int {
 	return multValue
 }
 
-func (v *IVector) Min() int {
+func (v *IVector) Min() (int, int) {
 	if len(v.Values) == 0 {
-		return 0
+		return 0, -1
 	}
-	minValue := v.Values[0]
-	for _, element := range v.Values {
+	minIndex := 0
+	minValue := v.Values[minIndex]
+	for index, element := range v.Values {
 		if element < minValue {
 			minValue = element
+			minIndex = index
 		}
 	}
-	return minValue
+	return minValue, minIndex
+}
+
+func (v *IVector) Max() (int, int) {
+	if len(v.Values) == 0 {
+		return 0, -1
+	}
+	maxIndex := 0
+	maxValue := v.Values[maxIndex]
+	for index, element := range v.Values {
+		if element > maxValue {
+			maxValue = element
+			maxIndex = index
+		}
+	}
+	return maxValue, maxIndex
 }
 
 func (v *IVector) Equals(a *IVector) bool {

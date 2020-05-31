@@ -1,5 +1,7 @@
 package domain
 
+// Two dimensional tuple representation
+// TODO: Extend this for multi dimensions
 type Tuple struct {
 	X int
 	Y int
@@ -16,8 +18,4 @@ func (tuple *Tuple) IsValidDimension() bool {
 		return false
 	}
 	return true
-}
-
-func (tuple *Tuple) IsValidDimensionWithSize(size int) bool {
-	return tuple.IsValidDimension() && tuple.Y >= size
 }

@@ -99,9 +99,7 @@ func TestVector_Unique(t *testing.T) {
 	v := vec.Unique()
 	assert.NotNil(t, v)
 	assert.Equal(t, 3, len(v.Values))
-	assert.Equal(t, 10.0, v.Values[0])
-	assert.Equal(t, 20.0, v.Values[1])
-	assert.Equal(t, 30.0, v.Values[2])
+	assert.Equal(t, 60.0, v.Sum())
 }
 
 func TestVector_MeanWithEmpty(t *testing.T) {

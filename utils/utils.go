@@ -73,16 +73,21 @@ func GetIndex(vector, newStrides, size []int) (int, error) {
 	return index, nil
 }
 
-func GetIndexFromVector(vector *domain.IVector, newStrides, shape *domain.IVector) (int, error) {
+func GetIndexFromVector(vector *domain.IVector, newStrides, shape *domain.IVector, broadcasting ...bool) (int, error) {
 	if vector == nil || vector.Values == nil {
 		return 0, errors.New("empty vector")
 	}
 	index := 0
 	for sIndex, stride := range newStrides.Values {
 		if vector.Values[sIndex] >= shape.Values[sIndex] {
-			return 0, errors.New("invalid vector")
+			if len(broadcasting) >= 1 {
+				index += 0
+			} else {
+				return 0, errors.New("invalid vector")
+			}
+		} else {
+			index += stride * vector.Values[sIndex]
 		}
-		index += stride * vector.Values[sIndex]
 	}
 	return index, nil
 }

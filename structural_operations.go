@@ -163,7 +163,7 @@ func Diag(nd NDArray, k ...int) NDArray {
 	if nd.Dims != 2 {
 		return NDArray{}
 	}
-	axis := nd.Shape.Min()
+	axis, _ := nd.Shape.Min()
 	newArr := NewNDArray("FLOAT64", []int{axis, 1}, true)
 	size := 0
 	for i := 0; i < axis; i++ {

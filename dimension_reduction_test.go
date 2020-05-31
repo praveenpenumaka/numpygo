@@ -36,6 +36,36 @@ func TestArgMaxWithFirstAxis(t *testing.T) {
 	assert.Equal(t, 1.0, a.Elements.Values[0])
 }
 
+func TestArgMinWithInvalidSize(t *testing.T) {
+	arr := NDArray{}
+	a := Argmin(arr)
+	assert.Equal(t, 0, a.Size)
+}
+
+func TestArgMinWithInvalidAxis(t *testing.T) {
+	arr := Rand("FLOAT64", 3, 4, 5)
+	a := Argmin(arr, 5)
+	assert.Equal(t, 0, a.Size)
+}
+
+func TestArgMinWithoutAxis(t *testing.T) {
+	arr := Arange(100)
+	arr.Reshape(&domain.IVector{Values: []int{10, 10}})
+	a := Argmin(arr)
+	assert.Equal(t, 1, a.Size)
+	assert.Equal(t, 0.0, a.Elements.Values[0])
+}
+
+func TestArgMinWithFirstAxis(t *testing.T) {
+	arr := Arange(6)
+	arr.Reshape(&domain.IVector{Values: []int{2, 3}})
+	a := Argmin(arr, 0)
+	assert.Equal(t, 3, a.Size)
+	assert.Equal(t, 0.0, a.Elements.Values[0])
+	assert.Equal(t, 0.0, a.Elements.Values[0])
+	assert.Equal(t, 0.0, a.Elements.Values[0])
+}
+
 func TestAminWithoutAxis(t *testing.T) {
 	arr := Rand("FLOAT64", 10, 10)
 	min := Amin(arr)
@@ -192,8 +222,4 @@ func TestUniqueWithInvalidAxis(t *testing.T) {
 	a := Zeros("FLOAT64", 10)
 	arr := Unique(a, 3)
 	assert.Equal(t, 0, arr.Size)
-}
-
-//TODO: Fix this test case
-func TestUnique(t *testing.T) {
 }

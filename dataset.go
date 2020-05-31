@@ -20,11 +20,15 @@ type DataSet struct {
 
 //TODO: Add tests
 func loadCSV(data string) (NDArray, NDArray, []string) {
+	if data == "" {
+		return NDArray{}, NDArray{}, nil
+	}
 	rows := strings.Split(data, "\n")
 	rowCount := len(rows)
 	if rowCount < 2 {
 		return NDArray{}, NDArray{}, nil
 	}
+
 	header := strings.Split(rows[0], ",")
 	headerLen := len(header)
 	if headerLen <= 1 {
@@ -97,7 +101,6 @@ func LoadDataFromFile(path string, featureNames []string) DataSet {
 	}
 }
 
-//TODO: Add tests
 func getRootPath() string {
 	_, b, _, _ := runtime.Caller(0)
 	d := path.Join(path.Dir(b))
@@ -107,13 +110,10 @@ func getRootPath() string {
 //TODO: Add tests
 func LoadData(datasetName string) DataSet {
 	var featureNames []string
-	currentDir := getRootPath()
-	basePath := currentDir + "/data/"
-	dataSetBasePath := basePath + datasetName
 	if datasetName == "iris" {
 		featureNames = []string{"sepal length (cm)", "sepal width (cm)",
 			"petal length (cm)", "petal width (cm)"}
 	}
-	dataPath := dataSetBasePath + "/data.csv"
+	dataPath := strings.Join([]string{getRootPath(), "/data/", datasetName, "/data.csv"}, "")
 	return LoadDataFromFile(dataPath, featureNames)
 }

@@ -87,7 +87,7 @@ func TestAmaxNewWithInvalidAxis(t *testing.T) {
 		{X: 3, Y: 3},
 		{X: 3, Y: 3},
 	}
-	arr.Set(&domain.Dimensions{Dims: dims}, float64(20))
+	assert.NoError(t, arr.Set(&domain.Dimensions{Dims: dims}, float64(20)))
 	maxArr := Amax(arr, 3)
 	assert.Equal(t, 0, maxArr.Size)
 }
@@ -98,7 +98,7 @@ func TestAmaxNewWithAxis(t *testing.T) {
 		{X: 3, Y: 3},
 		{X: 3, Y: 3},
 	}
-	arr.Set(&domain.Dimensions{Dims: dims}, float64(20))
+	assert.NoError(t, arr.Set(&domain.Dimensions{Dims: dims}, float64(20)))
 	maxArr := Amax(arr, 0)
 	assert.Equal(t, float64(20), maxArr.Elements.Values[3])
 }
@@ -109,7 +109,7 @@ func TestAmaxNewWithoutAxis(t *testing.T) {
 		{X: 3, Y: 3},
 		{X: 3, Y: 3},
 	}
-	arr.Set(&domain.Dimensions{Dims: dims}, float64(20))
+	assert.NoError(t, arr.Set(&domain.Dimensions{Dims: dims}, float64(20)))
 	wholeArr := Amax(arr)
 	assert.Equal(t, float64(20), wholeArr.Elements.Values[0])
 }

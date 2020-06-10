@@ -115,12 +115,12 @@ func TestArraySet(t *testing.T) {
 	dims := []domain.Tuple{
 		{X: 0, Y: 0},
 	}
-	arr.Set(&domain.Dimensions{Dims: dims}, float64(1))
+	assert.NoError(t, arr.Set(&domain.Dimensions{Dims: dims}, float64(1)))
 	assert.Equal(t, float64(1), arr.Elements.Values[0])
 	dims = []domain.Tuple{
 		{X: 1, Y: 9},
 	}
-	arr.Set(&domain.Dimensions{Dims: dims}, float64(1))
+	assert.NoError(t, arr.Set(&domain.Dimensions{Dims: dims}, float64(1)))
 	assert.Equal(t, float64(1), arr.Elements.Values[1])
 }
 

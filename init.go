@@ -1,9 +1,10 @@
 package numpygo
 
 import (
+	"math"
+
 	"github.com/praveenpenumaka/numpygo/domain"
 	"github.com/praveenpenumaka/numpygo/utils"
-	"math"
 )
 
 func newNDArray(dtype string, shape domain.IVector, noinit ...bool) NDArray {
@@ -84,7 +85,7 @@ func aRange(start, end, step int) NDArray {
 	}
 	size := delta / step
 	newnd := newNDArray("FLOAT64", domain.IVector{Values: []int{size}})
-	for i, _ := range newnd.Elements.Values {
+	for i := range newnd.Elements.Values {
 		newnd.Elements.Values[i] = float64(i * step)
 	}
 	return newnd

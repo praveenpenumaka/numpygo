@@ -5,7 +5,7 @@ type IVector struct {
 }
 
 func (v *IVector) CopyFrom(c []int) bool {
-	if c == nil || len(c) == 0 {
+	if len(c) == 0 {
 		return false
 	}
 	if v.Values == nil {
@@ -24,7 +24,7 @@ func (v *IVector) Padding(location string, value, len int) {
 		return
 	}
 	d := make([]int, len)
-	for i, _ := range d {
+	for i := range d {
 		d[i] = value
 	}
 	if location == "LEAD" {
@@ -35,7 +35,7 @@ func (v *IVector) Padding(location string, value, len int) {
 }
 
 func (v *IVector) Zeros() {
-	for i, _ := range v.Values {
+	for i := range v.Values {
 		v.Values[i] = 0
 	}
 }
@@ -57,7 +57,7 @@ func (v *IVector) Add(a *IVector) {
 	if len(v.Values) == 0 || len(a.Values) == 0 || len(v.Values) != len(a.Values) {
 		return
 	}
-	for i, _ := range v.Values {
+	for i := range v.Values {
 		v.Values[i] = v.Values[i] + a.Values[i]
 	}
 }
@@ -104,7 +104,7 @@ func (v *IVector) Equals(a *IVector) bool {
 	if len(v.Values) != len(a.Values) {
 		return false
 	}
-	for i, _ := range v.Values {
+	for i := range v.Values {
 		if v.Values[i] != a.Values[i] {
 			return false
 		}

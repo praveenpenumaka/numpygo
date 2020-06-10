@@ -82,7 +82,7 @@ func (v *Vector) Add(a *Vector) float64 {
 	if len(v.Values) != len(a.Values) {
 		return math.Inf(1)
 	}
-	for i, _ := range v.Values {
+	for i := range v.Values {
 		v.Values[i] = v.Values[i] + a.Values[i]
 	}
 	return float64(0)

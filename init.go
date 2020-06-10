@@ -18,8 +18,8 @@ func newNDArray(dtype string, shape domain.IVector, noinit ...bool) NDArray {
 	elements := domain.Vector{Values: make([]float64, size)}
 	dimensions := len(shape.Values)
 	strides := utils.GetStrides(size, dimensions, &shape)
-	if noinit != nil && len(noinit) > 0 {
-		if noinit[0] == true {
+	if len(noinit) > 0 {
+		if noinit[0] {
 			elements = domain.Vector{Values: nil}
 		}
 	}

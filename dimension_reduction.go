@@ -1,10 +1,11 @@
 package numpygo
 
 import (
-	"github.com/praveenpenumaka/numpygo/domain"
-	"github.com/praveenpenumaka/numpygo/utils"
 	"strconv"
 	"strings"
+
+	"github.com/praveenpenumaka/numpygo/domain"
+	"github.com/praveenpenumaka/numpygo/utils"
 )
 
 func Argmax(a NDArray, axis ...int) NDArray {
@@ -158,6 +159,9 @@ func DimensionReductionV2(lambda func(v domain.Vector) float64, a NDArray, axis 
 	for vector := ndIndex.Next(); vector != nil; vector = ndIndex.Next() {
 		newVector := vector
 		newIndex, err := utils.GetIndexFromVector(newVector, &newArray.Strides, &newArray.Shape)
+		if err != nil {
+			return NDArray{}
+		}
 		dimString := strings.Builder{}
 		for i, value := range vector.Values {
 			if i == axis {

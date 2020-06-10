@@ -1,9 +1,10 @@
 package domain
 
 import (
+	"math"
+
 	"github.com/praveenpenumaka/numpygo/domain/r_funcs"
 	"github.com/praveenpenumaka/numpygo/domain/v_funcs"
-	"math"
 )
 
 type Vector struct {

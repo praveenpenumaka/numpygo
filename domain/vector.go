@@ -1,9 +1,10 @@
 package domain
 
 import (
+	"math"
+
 	"github.com/praveenpenumaka/numpygo/domain/r_funcs"
 	"github.com/praveenpenumaka/numpygo/domain/v_funcs"
-	"math"
 )
 
 type Vector struct {
@@ -82,7 +83,7 @@ func (v *Vector) Add(a *Vector) float64 {
 	if len(v.Values) != len(a.Values) {
 		return math.Inf(1)
 	}
-	for i, _ := range v.Values {
+	for i := range v.Values {
 		v.Values[i] = v.Values[i] + a.Values[i]
 	}
 	return float64(0)
@@ -119,8 +120,7 @@ func (v *Vector) Min() (float64, int) {
 }
 
 func (v *Vector) Unique() *Vector {
-	var uniqueMap map[float64]bool
-	uniqueMap = make(map[float64]bool)
+	var uniqueMap = make(map[float64]bool, len(v.Values)/3)
 	var keys []float64
 	for _, e := range v.Values {
 		uniqueMap[e] = true

@@ -2,6 +2,7 @@ package numpygo
 
 import (
 	"fmt"
+
 	"github.com/praveenpenumaka/numpygo/domain"
 	"github.com/praveenpenumaka/numpygo/utils"
 )
@@ -11,7 +12,7 @@ func Split(a NDArray, index int, axis ...int) (NDArray, NDArray) {
 		return NDArray{}, NDArray{}
 	}
 	aAxis := 0
-	if axis != nil && len(axis) != 0 {
+	if len(axis) != 0 {
 		if axis[0] >= a.Dims {
 			return NDArray{}, NDArray{}
 		}
@@ -67,7 +68,7 @@ func Concatenate(a, b NDArray, axis ...int) NDArray {
 		return NDArray{}
 	}
 	aAxis := 0
-	if axis != nil && len(axis) != 0 {
+	if len(axis) != 0 {
 		if axis[0] > a.Dims {
 			return NDArray{}
 		}

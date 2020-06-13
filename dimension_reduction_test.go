@@ -1,9 +1,10 @@
 package numpygo
 
 import (
+	"testing"
+
 	"github.com/praveenpenumaka/numpygo/domain"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 func TestArgMaxWithInvalidSize(t *testing.T) {
@@ -82,42 +83,33 @@ func TestAminWithoutFirstAxis(t *testing.T) {
 
 func TestAmaxNewWithInvalidAxis(t *testing.T) {
 	arr := Zeros("FLOAT64", 10, 10)
-	dims := []domain.Tuple{domain.Tuple{
-		X: 3,
-		Y: 3,
-	}, domain.Tuple{
-		X: 3,
-		Y: 3,
-	}}
-	arr.Set(&domain.Dimensions{Dims: dims}, float64(20))
+	dims := []domain.Tuple{
+		{X: 3, Y: 3},
+		{X: 3, Y: 3},
+	}
+	assert.NoError(t, arr.Set(&domain.Dimensions{Dims: dims}, float64(20)))
 	maxArr := Amax(arr, 3)
 	assert.Equal(t, 0, maxArr.Size)
 }
 
 func TestAmaxNewWithAxis(t *testing.T) {
 	arr := Zeros("FLOAT64", 10, 10)
-	dims := []domain.Tuple{domain.Tuple{
-		X: 3,
-		Y: 3,
-	}, domain.Tuple{
-		X: 3,
-		Y: 3,
-	}}
-	arr.Set(&domain.Dimensions{Dims: dims}, float64(20))
+	dims := []domain.Tuple{
+		{X: 3, Y: 3},
+		{X: 3, Y: 3},
+	}
+	assert.NoError(t, arr.Set(&domain.Dimensions{Dims: dims}, float64(20)))
 	maxArr := Amax(arr, 0)
 	assert.Equal(t, float64(20), maxArr.Elements.Values[3])
 }
 
 func TestAmaxNewWithoutAxis(t *testing.T) {
 	arr := Zeros("FLOAT64", 10, 10)
-	dims := []domain.Tuple{domain.Tuple{
-		X: 3,
-		Y: 3,
-	}, domain.Tuple{
-		X: 3,
-		Y: 3,
-	}}
-	arr.Set(&domain.Dimensions{Dims: dims}, float64(20))
+	dims := []domain.Tuple{
+		{X: 3, Y: 3},
+		{X: 3, Y: 3},
+	}
+	assert.NoError(t, arr.Set(&domain.Dimensions{Dims: dims}, float64(20)))
 	wholeArr := Amax(arr)
 	assert.Equal(t, float64(20), wholeArr.Elements.Values[0])
 }

@@ -1,8 +1,9 @@
 package numpygo
 
 import (
-	"github.com/praveenpenumaka/numpygo/domain"
 	"math/rand"
+
+	"github.com/praveenpenumaka/numpygo/domain"
 )
 
 const OneBigNumber = 1000000
@@ -17,7 +18,7 @@ func Rand(dtype string, shape ...int) NDArray {
 	if nd.Size == 0 {
 		return NDArray{}
 	}
-	for index, _ := range nd.Elements.Values {
+	for index := range nd.Elements.Values {
 		nd.Elements.Values[index] = rand.Float64()
 	}
 	return nd

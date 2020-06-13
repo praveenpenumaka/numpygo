@@ -28,6 +28,9 @@ func (nd *NDArray) Mean(axis ...int) NDArray {
 	counter := Zeros("FLOAT64", newArray.Size)
 	for vector := ndIndex.Next(); vector != nil; vector = ndIndex.Next() {
 		oldIndex, err := utils.GetIndexFromVector(vector, &nd.Strides, &nd.Shape)
+		if err != nil {
+			return NDArray{}
+		}
 		newVector := vector.Remove(axis[0])
 		newIndex, err := utils.GetIndexFromVector(newVector, &newArray.Strides, &newArray.Shape)
 		if err != nil {

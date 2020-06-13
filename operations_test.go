@@ -1,20 +1,24 @@
 package numpygo
 
 import (
+	"testing"
+
 	"github.com/praveenpenumaka/numpygo/domain"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 func TestGetWithFloat64(t *testing.T) {
 	array := Ones("FLOAT64", 10, 10)
-	dims := []domain.Tuple{domain.Tuple{
-		X: 0,
-		Y: 9,
-	}, domain.Tuple{
-		X: 0,
-		Y: 9,
-	}}
+	dims := []domain.Tuple{
+		{
+			X: 0,
+			Y: 9,
+		},
+		{
+			X: 0,
+			Y: 9,
+		},
+	}
 	newArray, _ := array.Get(&domain.Dimensions{Dims: dims})
 	assert.NotNil(t, newArray)
 	assert.Equal(t, float64(1), newArray.Elements.Values[0])
@@ -27,13 +31,10 @@ func TestGetWithFloat64(t *testing.T) {
 
 func TestGetPartialData(t *testing.T) {
 	array := Ones("FLOAT64", 10, 10)
-	dims := []domain.Tuple{domain.Tuple{
-		X: 1,
-		Y: 2,
-	}, domain.Tuple{
-		X: 1,
-		Y: 2,
-	}}
+	dims := []domain.Tuple{
+		{X: 1, Y: 2},
+		{X: 1, Y: 2},
+	}
 	newArray, _ := array.Get(&domain.Dimensions{Dims: dims})
 	assert.Equal(t, float64(1), newArray.Elements.Values[0])
 	assert.Equal(t, 4, len(newArray.Elements.Values))
@@ -45,24 +46,18 @@ func TestGetPartialData(t *testing.T) {
 
 func TestGetIncorrectPartialData(t *testing.T) {
 	array := Ones("FLOAT64", 10, 10)
-	dims := []domain.Tuple{domain.Tuple{
-		X: 0,
-		Y: 0,
-	}, domain.Tuple{
-		X: 1,
-		Y: 10,
-	}}
+	dims := []domain.Tuple{
+		{X: 0, Y: 0},
+		{X: 1, Y: 10},
+	}
 	newArray, err := array.Get(&domain.Dimensions{Dims: dims})
 	assert.NotNil(t, err)
 	assert.NotNil(t, newArray)
 	assert.Equal(t, 0, newArray.Size)
-	dims = []domain.Tuple{domain.Tuple{
-		X: -1,
-		Y: 1,
-	}, domain.Tuple{
-		X: 1,
-		Y: 1,
-	}}
+	dims = []domain.Tuple{
+		{X: -1, Y: 1},
+		{X: 1, Y: 1},
+	}
 	newArray, err = array.Get(&domain.Dimensions{Dims: dims})
 	assert.NotNil(t, err)
 	assert.NotNil(t, newArray)
@@ -72,7 +67,7 @@ func TestGetIncorrectPartialData(t *testing.T) {
 func TestGetCorrectnessInOneD(t *testing.T) {
 	array := Ones("FLOAT64", 10)
 	dims := []domain.Tuple{
-		domain.Tuple{X: 0, Y: 3},
+		{X: 0, Y: 3},
 	}
 	newArray, err := array.Get(&domain.Dimensions{Dims: dims})
 	assert.Nil(t, err)
@@ -117,17 +112,15 @@ func TestGetIndexedWithValidIndexes(t *testing.T) {
 
 func TestArraySet(t *testing.T) {
 	arr := Zeros("FLOAT64", 10)
-	dims := []domain.Tuple{domain.Tuple{
-		X: 0,
-		Y: 0,
-	}}
-	arr.Set(&domain.Dimensions{Dims: dims}, float64(1))
+	dims := []domain.Tuple{
+		{X: 0, Y: 0},
+	}
+	assert.NoError(t, arr.Set(&domain.Dimensions{Dims: dims}, float64(1)))
 	assert.Equal(t, float64(1), arr.Elements.Values[0])
-	dims = []domain.Tuple{domain.Tuple{
-		X: 1,
-		Y: 9,
-	}}
-	arr.Set(&domain.Dimensions{Dims: dims}, float64(1))
+	dims = []domain.Tuple{
+		{X: 1, Y: 9},
+	}
+	assert.NoError(t, arr.Set(&domain.Dimensions{Dims: dims}, float64(1)))
 	assert.Equal(t, float64(1), arr.Elements.Values[1])
 }
 

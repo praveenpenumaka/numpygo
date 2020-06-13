@@ -1,9 +1,10 @@
 package domain
 
 import (
-	"github.com/stretchr/testify/assert"
 	"math"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestVector_Clip(t *testing.T) {

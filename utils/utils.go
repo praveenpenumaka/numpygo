@@ -2,11 +2,12 @@ package utils
 
 import (
 	"errors"
+
 	"github.com/praveenpenumaka/numpygo/domain"
 )
 
 func GetAxis(axis []int) int {
-	if axis != nil && len(axis) != 0 {
+	if len(axis) != 0 {
 		return axis[0]
 	}
 	return 0
